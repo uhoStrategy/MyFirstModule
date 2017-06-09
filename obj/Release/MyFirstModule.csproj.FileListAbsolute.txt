@@ -1,0 +1,4 @@
+C:\inetpub\wwwroot\ModDev2\bin\MyFirstModule.dll
+C:\inetpub\wwwroot\ModDev2\bin\MyFirstModule.pdb
+C:\inetpub\wwwroot\ModDev2\DesktopModules\MyFirstModule\obj\Release\MyFirstModule.dll
+C:\inetpub\wwwroot\ModDev2\DesktopModules\MyFirstModule\obj\Release\MyFirstModule.pdb

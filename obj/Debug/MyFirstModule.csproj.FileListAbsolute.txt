@@ -1,0 +1,5 @@
+C:\inetpub\wwwroot\ModDev2\bin\MyFirstModule.dll
+C:\inetpub\wwwroot\ModDev2\bin\MyFirstModule.pdb
+C:\inetpub\wwwroot\ModDev2\DesktopModules\MyFirstModule\obj\Debug\MyFirstModule.dll
+C:\inetpub\wwwroot\ModDev2\DesktopModules\MyFirstModule\obj\Debug\MyFirstModule.pdb
+C:\inetpub\wwwroot\ModDev2\DesktopModules\MyFirstModule\obj\Debug\MyFirstModule.csprojResolveAssemblyReference.cache

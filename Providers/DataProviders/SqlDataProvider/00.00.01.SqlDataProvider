@@ -1,0 +1,154 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+
+/************** TABLE CREATION SCRIPT ***********************/
+
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}CBP_Tasks]') and OBJECTPROPERTY(id, N'IsTable') = 1)
+BEGIN
+
+CREATE TABLE {databaseOwner}[{objectQualifier}CBP_Tasks](
+	[TaskID] [int] IDENTITY(1,1) NOT NULL,
+	[TaskName] [nvarchar](max) NOT NULL,
+	[TaskDescription] [nvarchar](max) NULL,
+	[IsComplete] [bit] NOT NULL,
+	[ModuleID] [int] NOT NULL,
+	[UserID] [int] NOT NULL
+	)
+	
+ALTER TABLE {databaseOwner}[{objectQualifier}CBP_Tasks] ADD CONSTRAINT [PK_{databaseOwner}{objectQualifier}CBP_Tasks] PRIMARY KEY CLUSTERED  ([TaskID])
+
+END
+
+GO
+
+
+
+
+/************** STORED PROCEDURE CREATION SCRIPT ***********************/
+
+IF EXISTS (select * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}CBP_GetTasks]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}{objectQualifier}CBP_GetTasks
+GO
+
+Create Procedure {databaseOwner}{objectQualifier}CBP_GetTasks
+	@ModuleId int
+AS
+	SELECT TaskId,
+		TaskName,
+		TaskDescription,
+		isComplete,
+		UserId,
+		ModuleId
+	FROM {databaseOwner}[{objectQualifier}CBP_Tasks]
+	WHERE ModuleId = @ModuleId
+GO
+
+
+
+
+
+
+IF EXISTS (select * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}CBP_AddTask]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}{objectQualifier}CBP_AddTask
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}CBP_AddTask
+	@TaskName nvarchar(max),
+	@TaskDescription nvarchar(max),
+	@IsComplete bit,
+	@ModuleID int,
+	@UserID int
+AS
+	INSERT INTO {databaseOwner}[{objectQualifier}CBP_Tasks](
+		TaskName,
+		TaskDescription,
+		IsComplete,
+		ModuleID,
+		UserID
+	)
+
+	VALUES (
+		@TaskName,
+		@TaskDescription,
+		@IsComplete,
+		@ModuleID,
+		@UserID
+	)
+
+SELECT @@IDENTITY
+GO
+
+
+
+
+IF EXISTS (select * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}CBP_UpdateTask]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+			DROP PROCEDURE {databaseOwner}{objectQualifier}CBP_UpdateTask
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}CBP_UpdateTask
+	@TaskID int,
+	@TaskName nvarchar(max),
+	@TaskDescription nvarchar(max),
+	@IsComplete bit
+	
+AS
+UPDATE {databaseOwner}[{objectQualifier}CBP_Tasks]
+   SET
+   		TaskName = @TaskName,
+		TaskDescription = @TaskDescription,
+		IsComplete = @IsComplete
+
+   WHERE TaskID = @TaskID
+
+	SELECT @TaskID
+GO
+
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}CBP_DeleteTask]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+		DROP PROCEDURE {databaseOwner}{objectQualifier}CBP_DeleteTask
+	GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}CBP_DeleteTask
+	@TaskId         int
+AS
+
+DELETE FROM {databaseOwner}[{objectQualifier}CBP_Tasks]
+WHERE  TaskID = @TaskId
+
+GO
+
+
+
+IF EXISTS (select * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}CBP_GetIncompleteTasks]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}{objectQualifier}CBP_GetIncompleteTasks
+GO
+
+Create Procedure {databaseOwner}{objectQualifier}CBP_GetIncompleteTasks
+	@ModuleId int
+AS
+
+SELECT TaskId,
+    	TaskName,
+		TaskDescription,
+		isComplete,
+		UserId,
+		ModuleId
+FROM {databaseOwner}[{objectQualifier}CBP_Tasks]
+WHERE ModuleId = @ModuleId AND isComplete = 0
+GO
+
+
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/
